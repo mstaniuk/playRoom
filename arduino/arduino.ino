@@ -77,7 +77,7 @@ void setOutputState(bool state) {
   updated = true;
 }
 
-void sendResponse() {
+void sendResponse(char *arr) {
   // ...
 }
 
