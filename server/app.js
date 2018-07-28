@@ -50,12 +50,15 @@ app.use(bodyParser.json());
 
 // helpers
 const getObjectMD5 = obj => {
-  const json = JSON.stringify(obj);
-  return md5(json);
+  try {
+    return md5(JSON.stringify(obj));
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 // Routing
-app.post("/update", function(req, res) {
+const updateRoute = (req, res) => {
   if (getObjectMD5(req.body.room) === req.body.hash) {
     store.dispatch(createOrUpdate(req.body.room));
     io.emit("updateState", { state: store.getState() });
@@ -64,27 +67,34 @@ app.post("/update", function(req, res) {
   } else {
     res.json({ success: false });
   }
-});
+};
 
-// Error handling
-app.use(function(req, res, next) {
+const clientError = (req, res, next) => {
   const err = new Error("Not found");
   err.status = 404;
   next(err);
-});
+};
 
-app.use(function(err, req, res, next) {
+const serverError = (err, req, res, next) => {
   console.error(err.stack);
   res.status(err.status || 500);
   res.json({ message: err.message, error: err.stack });
-});
+};
+
+app.post("/update", updateRoute);
+
+// Error handling
+app.use(clientError);
+app.use(serverError);
 
 // Socket events
-io.on("connection", function(socket) {
+const onSocketConnection = socket => {
   io.emit("updateState", { state: store.getState() });
-});
+};
+
+io.on("connection", onSocketConnection);
 
 // Server
-server.listen(3000, function() {
+server.listen(3000, () => {
   console.log("App started on port 3000");
 });
