@@ -36,6 +36,15 @@ Client:
 
 ## Notes
 
+### Arduino
+
+Uses third party libs:
+_MD5_ https://github.com/tzikis/ArduinoMD5
+
+_ArduinoJson_ https://github.com/bblanchon/ArduinoJson
+
+### Test API
+
 Test data for POST to `/update`
 
 ```json
