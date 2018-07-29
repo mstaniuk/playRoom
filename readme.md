@@ -39,7 +39,7 @@ Client:
 ### Arduino
 
 Used third party libs:
-_MD5_ https://github.com/tzikis/ArduinoMD5
+~~_MD5_ https://github.com/tzikis/ArduinoMD5~~ _Scrapped for now_
 
 _ArduinoJson_ https://github.com/bblanchon/ArduinoJson
 
@@ -48,7 +48,7 @@ _esp8266_ https://github.com/esp8266/Arduino
 #### Setup process
 
 1.  Install _Arduino IDE_ ( https://www.arduino.cc/en/main/software )
-2.  Install _MD5_ lib ( https://github.com/tzikis/ArduinoMD5#installation
+2.  ~~Install _MD5_ lib ( https://github.com/tzikis/ArduinoMD5#installation )~~ _Scrapped for now_
 3.  Install _ArduinoJson_ ( https://github.com/bblanchon/ArduinoJson )
     1.  Open _Arduino IDE_
     2.  Go to _Manage Libraries_ from _Sketch_ -> _Include Library_ menu (in topbar)

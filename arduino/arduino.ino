@@ -1,5 +1,5 @@
 #include <ArduinoJson.h>
-#include <MD5.h>
+#include <ESP8266WiFi.h>
 
 #define ARRAY_LEN(x)    (sizeof(x) / sizeof(x[0]))
 #define PIR_RIGHT_PIN 3
@@ -8,6 +8,10 @@
 #define ROOM_ID "PLAY ROOM"
 #define DEVICE_ID 1
 #define JSON_BUFFER_SIZE 250
+
+#define WIFI_SSID "******"
+#define WIFI_PASSWORD "******"
+#define API_HOST "localhost:3000"
 
 const size_t bufferSize = JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3);
 
@@ -27,6 +31,18 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(PIR_LEFT_PIN), pinterruptHandler, CHANGE);
 
   Serial.begin(9600);
+
+  Serial.println();
+
+  Serial.printf("Connecting to %s ", WIFI_SSID);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println(" connected");
 }
 
 void loop() {
@@ -47,29 +63,19 @@ void pinterruptHandler() {
   state = rightPirState == HIGH || leftPirState == HIGH;
 }
 
-void getResponseJSON(char *arr, bool state) {
+String getResponseJSON(bool state) {
+  String json;
   DynamicJsonBuffer dynamicJsonBuffer(bufferSize);
 
   JsonObject& root = dynamicJsonBuffer.createObject();
-  JsonObject& room = root.createNestedObject("room");
+  
+  root["id"] = ROOM_ID;
+  root["deviceId"] = DEVICE_ID;
+  root["status"] = state ? "OCCUPIED" : "FREE";
+  
+  root.printTo(json);
 
-  unsigned char* hash;
-  char *md5str;
-
-  room["id"] = ROOM_ID;
-  room["deviceId"] = DEVICE_ID;
-  room["status"] = state ? "OCCUPIED" : "FREE";
-
-  room.printTo(arr, JSON_BUFFER_SIZE);
-
-  hash = MD5::make_hash(arr, JSON_BUFFER_SIZE);
-  md5str = MD5::make_digest(hash, 16);
-
-  root["hash"] = md5str;
-  root.printTo(arr, JSON_BUFFER_SIZE);
-
-  free(hash);
-  free(md5str);
+  return json;
 }
 
 void setOutputState(bool state) {
@@ -77,15 +83,24 @@ void setOutputState(bool state) {
   updated = true;
 }
 
-void sendResponse(char *arr) {
-  // ...
+String createPostRequest(String endpoint, String jsonData) {
+  return String("POST ") + endpoint + " HTTP/1.1\r\n" +
+                  "Host: "+ API_HOST +"\r\n" +
+                  "content-type: application/json\r\n" +
+                  "Content-Length: " + jsonData.length() +"\r\n" +
+                  "\r\n"+jsonData;
+}
+
+void sendResponse(String jsonData) {
+  String postRequest = createPostRequest("/update", jsonData);
+
+  Serial.println(postRequest);
 }
 
 void handleStateChange(bool state) {
   if (state == true) {
     setOutputState(state);
-    getResponseJSON(jsonBuffer, state);
-    sendResponse(jsonBuffer);
+    sendResponse(getResponseJSON(state));
   } else {
     updated = state;
     lastTimestamp = millis();
@@ -98,8 +113,7 @@ void handleStateCooldown() {
 
     if (currentTimestamp - lastTimestamp >= cooldown) {
       setOutputState(false);
-      getResponseJSON(jsonBuffer, false);
-      sendResponse(jsonBuffer);
+      sendResponse(getResponseJSON(false));
     }
   }
 }
