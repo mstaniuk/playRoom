@@ -33,7 +33,12 @@ const view = (state, actions) =>
     h("h1", {}, "Play Room"),
     h("div", {}, state.connection ? "Connected" : "Disconnected"),
     ...state.rooms.map(room =>
-      h("div", {}, [h("div", {}, room.id), h("div", {}, room.status)])
+      h("div", {}, [
+        h("div", {}, `Room id: ${room.id}`),
+        h("div", {}, `Room status: ${room.status}`),
+        h("div", {}, `Device id: ${room.deviceId}`),
+        h("hr", {}, [])
+      ])
     )
   ]);
 
