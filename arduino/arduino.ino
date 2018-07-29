@@ -1,13 +1,11 @@
 #include <ArduinoJson.h>
 #include <ESP8266WiFi.h>
 
-#define ARRAY_LEN(x)    (sizeof(x) / sizeof(x[0]))
 #define PIR_RIGHT_PIN 3
 #define PIR_LEFT_PIN 2
 #define OUTPUT_PIN 13
 #define ROOM_ID "PLAY ROOM"
 #define DEVICE_ID 1
-#define JSON_BUFFER_SIZE 250
 
 #define WIFI_SSID "******"
 #define WIFI_PASSWORD "******"
@@ -18,9 +16,8 @@ const size_t bufferSize = JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3);
 bool lastState = false;
 volatile bool state = false;
 bool updated = true;
-char jsonBuffer[JSON_BUFFER_SIZE];
 unsigned long lastTimestamp = 0L;
-unsigned long const cooldown = 10 * 1000; // 10s
+unsigned long const cooldown = 6 * 10 * 1000; // 1m
 
 void setup() {
   pinMode(PIR_RIGHT_PIN, INPUT_PULLUP);
@@ -36,7 +33,7 @@ void setup() {
 
   Serial.printf("Connecting to %s ", WIFI_SSID);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  
+
   while (WiFi.status() != WL_CONNECTED)
   {
     delay(500);
@@ -52,7 +49,6 @@ void loop() {
   }
 
   handleStateCooldown();
-  
 }
 
 void(* softRestart) (void) = 0;
@@ -68,11 +64,11 @@ String getResponseJSON(bool state) {
   DynamicJsonBuffer dynamicJsonBuffer(bufferSize);
 
   JsonObject& root = dynamicJsonBuffer.createObject();
-  
+
   root["id"] = ROOM_ID;
   root["deviceId"] = DEVICE_ID;
   root["status"] = state ? "OCCUPIED" : "FREE";
-  
+
   root.printTo(json);
 
   return json;
@@ -85,22 +81,56 @@ void setOutputState(bool state) {
 
 String createPostRequest(String endpoint, String jsonData) {
   return String("POST ") + endpoint + " HTTP/1.1\r\n" +
-                  "Host: "+ API_HOST +"\r\n" +
-                  "content-type: application/json\r\n" +
-                  "Content-Length: " + jsonData.length() +"\r\n" +
-                  "\r\n"+jsonData;
+         "Host: " + API_HOST + "\r\n" +
+         "content-type: application/json\r\n" +
+         "Content-Length: " + jsonData.length() + "\r\n" +
+         "\r\n" + jsonData;
 }
 
-void sendResponse(String jsonData) {
+bool parseResponse(String response) {
+  DynamicJsonBuffer dynamicJsonBuffer(bufferSize);
+  JsonObject& root = dynamicJsonBuffer.parseObject(response);
+
+  return root["success"];
+}
+
+bool sendRequest(String jsonData) {
+  WiFiClient client;
   String postRequest = createPostRequest("/update", jsonData);
 
-  Serial.println(postRequest);
+  Serial.printf("\n[Connecting to %s ... ", API_HOST);
+  if (client.connect(API_HOST, 80)) {
+    String response = "";
+    Serial.println("connected]");
+
+    Serial.println("[Sending a request]");
+    Serial.println(postRequest);
+    
+    client.print(postRequest);
+
+    Serial.println("[Response:]");
+    while (client.connected()) {
+      if (client.available()) {
+        response.concat(client.readString());
+      }
+    }
+    
+    client.stop();
+    Serial.println("\n[Disconnected]");
+
+    return parseResponse(response);
+  } else {
+    Serial.println("connection failed!]");
+    client.stop();
+
+    return false;
+  }
 }
 
 void handleStateChange(bool state) {
   if (state == true) {
     setOutputState(state);
-    sendResponse(getResponseJSON(state));
+    sendRequest(getResponseJSON(state));
   } else {
     updated = state;
     lastTimestamp = millis();
@@ -113,7 +143,7 @@ void handleStateCooldown() {
 
     if (currentTimestamp - lastTimestamp >= cooldown) {
       setOutputState(false);
-      sendResponse(getResponseJSON(false));
+      sendRequest(getResponseJSON(false));
     }
   }
 }
