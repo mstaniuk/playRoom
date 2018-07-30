@@ -27,14 +27,18 @@ const actions = {
   setConnection: status => state =>
     Object.assign({}, state, { connection: state })
 };
-
+const roomView = room =>
+  h("div", {}, [
+    h("div", {}, `Room id: ${room.id}`),
+    h("div", {}, `Room status: ${room.status}`),
+    h("div", {}, `Device id: ${room.deviceId}`),
+    h("hr", {}, [])
+  ]);
 const view = (state, actions) =>
   h("div", {}, [
     h("h1", {}, "Play Room"),
     h("div", {}, state.connection ? "Connected" : "Disconnected"),
-    ...state.rooms.map(room =>
-      h("div", {}, [h("div", {}, room.id), h("div", {}, room.status)])
-    )
+    ...state.rooms.map(roomView)
   ]);
 
 const ha = app(state, actions, view, document.getElementById("app"));

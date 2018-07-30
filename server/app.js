@@ -4,7 +4,6 @@ const socket = require("socket.io");
 const { createStore } = require("redux");
 const path = require("path");
 const bodyParser = require("body-parser");
-const md5 = require("md5");
 const app = express();
 const server = http.createServer(app);
 const io = socket(server);
@@ -48,24 +47,16 @@ const store = createStore((state = initialState, action) => {
 app.use(express.static(path.resolve(__dirname, "../client/")));
 app.use(bodyParser.json());
 
-// helpers
-const getObjectMD5 = obj => {
-  try {
-    return md5(JSON.stringify(obj));
-  } catch (e) {
-    console.error(e);
-  }
-};
-
 // Routing
-const updateRoute = (req, res) => {
-  if (getObjectMD5(req.body.room) === req.body.hash) {
-    store.dispatch(createOrUpdate(req.body.room));
+app.post("/update", function(req, res) {
+  try {
+    store.dispatch(createOrUpdate(req.body));
     io.emit("updateState", { state: store.getState() });
 
     res.json({ success: true });
-  } else {
+  } catch (e) {
     res.json({ success: false });
+    console.error(e);
   }
 };
 
