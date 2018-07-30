@@ -1,0 +1,21 @@
+@import "normalize";
+
+@import "variables";
+@import "typography";
+
+* {
+	&,
+	&:before,
+	&:after {
+		box-sizing: border-box;
+	}
+}
+
+html,
+body {
+	background-color: $color-light;
+	padding: 0;
+	margin: 0;
+	font-family: "Lato", sans-serif;
+	color: $color-black;
+}

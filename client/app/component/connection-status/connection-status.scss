@@ -1,0 +1,44 @@
+@import "../../styles/variables";
+@import "../../styles/sizing";
+
+.connection-status {
+	position: relative;
+	display: inline-block;
+	width: size(1);
+	height: size(1);
+	border-radius: size(1);
+	background-color: $color-gray;
+
+	&--connected {
+		background-color: $color-green;
+
+		&:before {
+			background-color: $color-green;
+			position: absolute;
+			content: "";
+			top: 0;
+			left: 0;
+			width: size(1);
+			height: size(1);
+			border-radius: size(1);
+			opacity: 0;
+			transform: scale(1);
+			transform-origin: center center;
+			animation: ripple 2s linear 1s infinite;
+		}
+	}
+
+	@keyframes ripple {
+		0% {
+			transform: scale(1);
+		}
+		75% {
+			transform: scale(1.75);
+			opacity: 0.5;
+		}
+		100% {
+			transform: scale(4);
+			opacity: 0;
+		}
+	}
+}

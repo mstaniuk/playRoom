@@ -58,7 +58,7 @@ app.post("/update", function(req, res) {
     res.json({ success: false });
     console.error(e);
   }
-};
+});
 
 const clientError = (req, res, next) => {
   const err = new Error("Not found");
@@ -71,8 +71,6 @@ const serverError = (err, req, res, next) => {
   res.status(err.status || 500);
   res.json({ message: err.message, error: err.stack });
 };
-
-app.post("/update", updateRoute);
 
 // Error handling
 app.use(clientError);

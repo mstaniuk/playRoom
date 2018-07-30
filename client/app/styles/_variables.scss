@@ -1,0 +1,83 @@
+$size-base: 8px;
+$gutter: $size-base * 2;
+
+// Breakpoints
+$breakpoint-x-small: 480px;
+$breakpoint-smaller: 640px;
+$breakpoint-small: 768px;
+$breakpoint-medium: 1024px;
+$breakpoint-large: 1280px;
+$breakpoint-x-large: 1366px;
+$breakpoint-huge: 1600px;
+
+// Breakpoint list
+$breakpoints: (
+	"x-small": (
+		min-width: $breakpoint-x-small
+	),
+	"x-small-max": (
+		max-width: $breakpoint-x-small - 1
+	),
+	"smaller": (
+		min-width: $breakpoint-smaller
+	),
+	"smaller-max": (
+		max-width: $breakpoint-smaller - 1
+	),
+	"small": (
+		min-width: $breakpoint-small
+	),
+	"small-max": (
+		max-width: $breakpoint-small - 1
+	),
+	"medium": (
+		min-width: $breakpoint-medium
+	),
+	"medium-max": (
+		max-width: $breakpoint-medium - 1
+	),
+	"large": (
+		min-width: $breakpoint-large
+	),
+	"large-max": (
+		max-width: $breakpoint-large - 1
+	),
+	"x-large": (
+		min-width: $breakpoint-x-large
+	),
+	"x-large-max": (
+		max-width: $breakpoint-x-large - 1
+	),
+	"huge": (
+		min-width: $breakpoint-huge
+	),
+	"huge-max": (
+		max-width: $breakpoint-huge - 1
+	),
+	"v-smaller": (
+		min-height: $breakpoint-smaller
+	),
+	"v-small": (
+		min-height: $breakpoint-small
+	),
+	"print": print
+);
+
+// Colors
+$color-white: #ffffff;
+$color-black: #212121;
+$color-gray: #9e9e9e;
+$color-light: #fafafa;
+$color-green: #c6ff00;
+$color-red: #ff3d00;
+
+// Elevation
+$elevation-flat: solid 1px rgba($color-black, 0.15);
+$elevation-none: 0 0 0 0 rgba($color-black, 0);
+$elevation-list: (
+	(0 2px 2px 0 rgba($color-black, 0.15)),
+	(0 4px 8px 0 rgba($color-black, 0.15)),
+	(0 6px 12px 0 rgba($color-black, 0.15)),
+	(0 8px 16px 0 rgba($color-black, 0.15)),
+	(0 12px 24px 4px rgba($color-black, 0.15))
+);

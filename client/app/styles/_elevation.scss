@@ -1,0 +1,12 @@
+@import "variables";
+
+@mixin elevation($elevation) {
+	@if ($elevation == "none") {
+		box-shadow: $elevation-none;
+		border: none;
+	} @else if($elevation == "flat") {
+		border: $elevation-flat;
+	} @else {
+		box-shadow: nth($elevation-list, $elevation);
+	}
+}

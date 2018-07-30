@@ -1,5 +1,11 @@
 import { h, app } from "hyperapp";
 import io from "socket.io-client";
+
+import "./styles/_global.scss";
+
+import roomView from "./component/room/room.js";
+import connectionStatusView from "./component/connection-status/connection-status.js";
+
 const state = {
   rooms: [],
   connection: false
@@ -27,17 +33,14 @@ const actions = {
   setConnection: status => state =>
     Object.assign({}, state, { connection: state })
 };
-const roomView = room =>
-  h("div", {}, [
-    h("div", {}, `Room id: ${room.id}`),
-    h("div", {}, `Room status: ${room.status}`),
-    h("div", {}, `Device id: ${room.deviceId}`),
-    h("hr", {}, [])
-  ]);
+
 const view = (state, actions) =>
   h("div", {}, [
     h("h1", {}, "Play Room"),
-    h("div", {}, state.connection ? "Connected" : "Disconnected"),
+    h("div", {}, [
+      state.connection ? "connected" : "disconnected",
+      connectionStatusView(state.connection)
+    ]),
     ...state.rooms.map(roomView)
   ]);
 

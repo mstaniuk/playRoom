@@ -1,0 +1,19 @@
+@import "../../styles/variables";
+@import "../../styles/sizing";
+@import "../../styles/elevation";
+
+.card {
+	$root: &;
+
+	@include elevation(1);
+
+	@for $i from 1 through 5 {
+		#{$root}--elevation-#{$i} {
+			@include elevation($i);
+		}
+	}
+
+	&__content {
+		padding: size(2);
+	}
+}
