@@ -19,7 +19,8 @@ const babelConfig = {
       {
         modules: false
       }
-    ]
+    ],
+    ["minify"]
   ],
   plugins: ["external-helpers", "transform-react-jsx"]
 };
