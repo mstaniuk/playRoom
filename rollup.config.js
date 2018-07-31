@@ -13,28 +13,30 @@ const scssConfig = {
 
 const babelConfig = {
   babelrc: false,
-  presets: [
-    [
-      "env",
-      {
-        modules: false
-      }
-    ],
-    ["minify"]
-  ],
-  plugins: ["external-helpers", "transform-react-jsx"]
+  exclude: "node_modules/**",
+  // presets: [
+  //   [
+  //     "env",
+  //     {
+  //       modules: false
+  //     }
+  //   ],
+  //   ["minify"]
+  // ],
+  plugins: [["transform-react-jsx", { pragma: "h" }], "external-helpers"]
 };
 
 export default {
   input: "./client/app/main.js",
   output: {
     file: "./client/dist/js/app.js",
-    format: "cjs"
+    format: "iife"
   },
   plugins: [
     resolve(resolveConfig),
-    commonjs(),
-    scss(scssConfig)
-    // babel(babelConfig)
+    scss(scssConfig),
+    babel(babelConfig),
+
+    commonjs()
   ]
 };
