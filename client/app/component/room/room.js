@@ -1,14 +1,14 @@
 import { h } from "hyperapp";
 
 import "./room.scss";
-import card from "../card/card.js";
+import Card from "../card/card.js";
 
-export default roomData =>
-  card([
-    h("div", {}, [
-      h("div", {}, `Room id: ${roomData.id}`),
-      h("div", {}, `Room status: ${roomData.status}`),
-      h("div", {}, `Device id: ${roomData.deviceId}`),
-      h("hr", {}, [])
-    ])
-  ]);
+export default ({ id, status, deviceId }) => (
+  <Card backgroundColor={status === "free" ? "green" : "gray"}>
+    <ul>
+      <li>Room id: {id}</li>
+      <li>Room status: {status}</li>
+      <li>Device id: {deviceId}</li>
+    </ul>
+  </Card>
+);

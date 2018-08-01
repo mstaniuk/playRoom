@@ -1,0 +1,26 @@
+@import "sizing";
+
+.animation {
+  &--jump {
+    animation: jump 800ms ease-in-out 1;
+  }
+}
+
+@keyframes jump {
+  0% {
+    transform: translateY(0);
+  }
+  55% {
+    transform: translateY(#{size(-1)});
+  }
+  75% {
+    transform: translateY(0);
+  }
+  95% {
+    transform: translateY(#{size(-0.5)});
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}

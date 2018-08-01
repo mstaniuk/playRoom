@@ -63,6 +63,15 @@ $breakpoints: (
 	"print": print
 );
 
+$container-sizes: (
+	("smaller", $breakpoint-smaller - $gutter),
+	("small", $breakpoint-small - $gutter),
+	("medium", $breakpoint-medium - $gutter),
+	("large", $breakpoint-large - $gutter),
+	("x-large", $breakpoint-x-large - $gutter),
+	("huge", $breakpoint-huge - $gutter)
+);
+
 // Colors
 $color-white: #ffffff;
 $color-black: #212121;

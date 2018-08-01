@@ -1,14 +1,20 @@
-import { h, app } from "hyperapp";
+import { h } from "hyperapp";
 
-import roomView from "../room/room.js";
-import connectionStatusView from "../connection-status/connection-status.js";
+import "./app.scss";
 
-export default (state, actions) =>
-  h("div", {}, [
-    h("h1", {}, "Play Room"),
-    h("div", {}, [
-      state.connection ? "connected" : "disconnected",
-      connectionStatusView(state.connection)
-    ]),
-    ...state.rooms.map(roomView)
-  ]);
+import Room from "../room/room.js";
+import ConnectionStatus from "../connection-status/connection-status.js";
+import Container from "../container/container.js";
+
+const getRooms = rooms => rooms.map(room => <Room {...room} key={room.id} />);
+
+export default (state, actions) => (
+  <Container>
+    <h1>Play Room</h1>
+    <div>
+      {state.connection ? "connected" : "disconnected"}
+      <ConnectionStatus connection={state.connection} />
+    </div>
+    <div>{getRooms(state.rooms)}</div>
+  </Container>
+);

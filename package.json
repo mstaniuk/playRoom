@@ -1,7 +1,8 @@
 {
   "scripts": {
     "server": "node server/app.js",
-    "client": "rollup -c rollup.config.js"
+    "client": "rollup -c rollup.config.js",
+    "client:watch": "onchange './client/app/**/*' -- npm run client"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -18,6 +19,7 @@
     "babel-plugin-transform-require-ignore": "^0.1.1",
     "babel-preset-env": "^1.7.0",
     "babel-preset-minify": "^0.4.3",
+    "onchange": "^4.1.0",
     "rollup": "^0.63.4",
     "rollup-plugin-babel": "^3.0.7",
     "rollup-plugin-commonjs": "^9.1.3",

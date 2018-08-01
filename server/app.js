@@ -18,19 +18,25 @@ const createOrUpdate = room => ({
 });
 
 // Redux: reducer helpers
-const updateRoom = oldRoom => newRoom =>
-  oldRoom.id === newRoom.id ? Object.assign({}, oldRoom, newRoom) : oldRoom;
+const updateRoom = newRoom => oldRoom => {
+  console.log(oldRoom, newRoom);
+  return oldRoom.id === newRoom.id
+    ? Object.assign({}, oldRoom, newRoom)
+    : oldRoom;
+};
 
 const isRoomInCollection = collection => room =>
   collection.findIndex(collectedRoom => collectedRoom.id === room.id) > -1;
 
 // Redux: reducers
-const createOrUpdateReducer = (state, action) =>
-  action.room.id != null
+const createOrUpdateReducer = (state, action) => {
+  console.log(state, action);
+  return action.room.id != null
     ? isRoomInCollection(state)(action.room)
       ? state.map(updateRoom(action.room))
       : [...state, action.room]
     : state;
+};
 
 // Redux: store
 const initialState = [];
@@ -53,7 +59,7 @@ app.post("/update", function(req, res) {
     store.dispatch(createOrUpdate(req.body));
     io.emit("updateState", { state: store.getState() });
 
-    res.json({ success: true });
+    res.json(store.getState());
   } catch (e) {
     res.json({ success: false });
     console.error(e);

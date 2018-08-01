@@ -12,7 +12,7 @@ export default hyperappActions => {
   });
 
   socket.on("updateState", function(data) {
-    data.state.forEach(room => hyperappActions.addRoom(room));
+    data.state.forEach(room => hyperappActions.createOrUpdateRoom(room));
   });
 
   return socket;

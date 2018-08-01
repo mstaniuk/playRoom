@@ -1,0 +1,19 @@
+@import "../../styles/variables";
+@import "../../styles/responsive";
+
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: $gutter;
+  padding-right: $gutter;
+
+  @each $container-size in $container-sizes {
+    $breakpoint-name: nth($container-size, 1);
+    $max-width: nth($container-size, 2);
+
+    @include respond-to(#{$breakpoint-name}) {
+      max-width: $max-width;
+    }
+  }
+}
