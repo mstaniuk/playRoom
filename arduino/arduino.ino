@@ -1,15 +1,16 @@
 #include <ArduinoJson.h>
 #include <ESP8266WiFi.h>
 
-#define PIR_RIGHT_PIN 3
-#define PIR_LEFT_PIN 2
+#define PIR_RIGHT_PIN D6
+#define PIR_LEFT_PIN D5
 #define OUTPUT_PIN 13
 #define ROOM_ID "PLAY ROOM"
 #define DEVICE_ID 1
 
-#define WIFI_SSID "******"
-#define WIFI_PASSWORD "******"
-#define API_HOST "localhost:3000"
+#define WIFI_SSID "********"
+#define WIFI_PASSWORD "********"
+#define API_HOST "********"
+#define API_PORT 80
 
 const size_t bufferSize = JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3);
 
@@ -17,7 +18,7 @@ bool lastState = false;
 volatile bool state = false;
 bool updated = true;
 unsigned long lastTimestamp = 0L;
-unsigned long const cooldown = 6 * 10 * 1000; // 1m
+unsigned long const cooldown =  30 * 1000; // 30s
 
 void setup() {
   pinMode(PIR_RIGHT_PIN, INPUT_PULLUP);
@@ -39,12 +40,14 @@ void setup() {
     delay(500);
     Serial.print(".");
   }
-  Serial.println(" connected");
+  Serial.print("Connected, IP address: ");
+  Serial.println(WiFi.localIP());
 }
 
 void loop() {
   if (lastState != state) {
     lastState = state;
+    Serial.println("State changed");
     handleStateChange(state);
   }
 
@@ -81,10 +84,15 @@ void setOutputState(bool state) {
 
 String createPostRequest(String endpoint, String jsonData) {
   return String("POST ") + endpoint + " HTTP/1.1\r\n" +
-         "Host: " + API_HOST + "\r\n" +
+         "Host: " + API_HOST + ":" + API_PORT + "\r\n" +
          "content-type: application/json\r\n" +
          "Content-Length: " + jsonData.length() + "\r\n" +
-         "\r\n" + jsonData;
+         "\r\n" + jsonData + "\r\n\r\n";
+}
+
+String createGetRequest(String endpoint) {
+  return String("GET ") + endpoint + " HTTP/1.1\r\n" +
+         "Host: " + API_HOST + ":" + API_PORT + "\r\n\r\n";
 }
 
 bool parseResponse(String response) {
@@ -99,7 +107,7 @@ bool sendRequest(String jsonData) {
   String postRequest = createPostRequest("/update", jsonData);
 
   Serial.printf("\n[Connecting to %s ... ", API_HOST);
-  if (client.connect(API_HOST, 80)) {
+  if (client.connect(API_HOST, API_PORT)) {
     String response = "";
     Serial.println("connected]");
 
