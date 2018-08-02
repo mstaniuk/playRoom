@@ -1,7 +1,7 @@
 import io from "socket.io-client";
 
 export default hyperappActions => {
-  const socket = io("http://localhost:3000");
+  const socket = io(window.location.origin);
 
   socket.on("connect", function(data) {
     hyperappActions.setConnection(true);
