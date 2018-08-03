@@ -5,29 +5,14 @@
 .card {
   $root: &;
 
-  @include elevation(1);
+  @include elevation(2);
 
-  transition: box-shadow 250ms ease-in-out, border-color 400ms ease-in-out;
+  transition: box-shadow 250ms ease-in-out;
   background-color: $color-white;
-  border: size(0.5) solid $color-white;
 
   @for $i from 1 through 5 {
     #{$root}--elevation-#{$i} {
       @include elevation($i);
     }
-  }
-
-  &--border {
-    &-gray {
-      border-color: rgba($color-gray, 0.24);
-    }
-
-    &-green {
-      border-color: rgba($color-green, 0.24);
-    }
-  }
-
-  &__content {
-    padding: size(2);
   }
 }

@@ -4,11 +4,22 @@ import "./room.scss";
 import Card from "../card/card.js";
 
 export default ({ id, status, deviceId }) => (
-  <Card backgroundColor={status.toLowerCase() === "free" ? "green" : "gray"}>
-    <ul>
-      <li>Room id: {id}</li>
-      <li>Room status: {status}</li>
-      <li>Device id: {deviceId}</li>
-    </ul>
+  <Card>
+    <div class={`room ${status.toLowerCase() === "free" ? "room--free" : ""}`}>
+      <div class="room__header">
+        Room
+        <h2 class="room__title">{id}</h2>
+      </div>
+      <div class="room__content">
+        Status
+        <div class="room__status">
+          {status.toLowerCase() === "free" ? "Free" : "Occupied"}
+        </div>
+      </div>
+      <div class="room__footer">
+        Observed by
+        <div class="room__device">{deviceId}</div>
+      </div>
+    </div>
   </Card>
 );

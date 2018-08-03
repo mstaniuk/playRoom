@@ -1,0 +1,43 @@
+@import "../../styles/sizing";
+@import "../../styles/variables";
+
+.room {
+  $root: &;
+
+  &--free {
+    #{$root}__header {
+      background-color: $color-green;
+      color: darken($color-green, 40);
+    }
+  }
+
+  &__header {
+    transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
+    padding: size(1);
+    font-size: 12px;
+  }
+
+  &__title {
+    font-size: 16px;
+  }
+
+  &__content {
+    padding: size(2) size(1);
+    font-size: 14px;
+  }
+
+  &__status {
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  &__footer {
+    padding: size(1);
+    font-size: 12px;
+    background-color: $color-gray-light;
+  }
+
+  &__device {
+    font-size: 14px;
+  }
+}
