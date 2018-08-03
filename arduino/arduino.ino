@@ -4,15 +4,15 @@
 #define PIR_RIGHT_PIN D6
 #define PIR_LEFT_PIN D5
 #define OUTPUT_PIN 13
-#define ROOM_ID "PLAY ROOM"
-#define DEVICE_ID 1
+#define ROOM_ID "Play station"
+#define DEVICE_ID "Janusz"
 
 #define WIFI_SSID "********"
 #define WIFI_PASSWORD "********"
 #define API_HOST "********"
 #define API_PORT 80
 
-const size_t bufferSize = JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3);
+const size_t bufferSize = JSON_OBJECT_SIZE(3) + 120;
 
 bool lastState = false;
 volatile bool state = false;
