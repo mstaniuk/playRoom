@@ -5,7 +5,7 @@
 .card {
   $root: &;
 
-  @include elevation(2);
+  @include elevation(1);
 
   transition: box-shadow 250ms ease-in-out;
   background-color: $color-white;

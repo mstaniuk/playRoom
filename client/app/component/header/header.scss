@@ -1,0 +1,12 @@
+@import "../../styles/variables";
+@import "../../styles/sizing";
+@import "../../styles/elevation";
+.header {
+  @include elevation(3);
+
+  padding-top: size(1);
+  padding-bottom: size(1);
+  position: sticky;
+  background-color: $color-black;
+  color: $color-white;
+}

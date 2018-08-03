@@ -6,15 +6,15 @@
 
   &--free {
     #{$root}__header {
-      background-color: $color-green;
-      color: darken($color-green, 40);
+      border-color: $color-green;
     }
   }
 
   &__header {
-    transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
-    padding: size(1);
+    transition: border-color 300ms ease-in-out;
+    padding: size(0.5) size(1) size(1) size(1);
     font-size: 12px;
+    border-top: size(0.5) solid $color-gray-light;
   }
 
   &__title {
