@@ -1,0 +1,28 @@
+@import "../../styles/variables";
+@import "../../styles/elevation";
+@import "../../styles/sizing";
+
+.connection {
+  @include elevation(1);
+
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  height: size(3);
+  border-radius: size(5);
+  background-color: $color-white;
+
+  &__indicator {
+    width: size(3);
+    height: size(3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__text {
+    font-size: 14px;
+    padding-right: size(1);
+    padding-left: size(1);
+  }
+}
