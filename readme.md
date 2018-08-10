@@ -3,6 +3,16 @@
 Simple room occupancy observer IoT system based on two PIR modules and node server.
 blah blah blah...
 
+## Commands
+
+### Start server
+
+`npm run server`
+
+### Build front
+
+`npm run client`
+
 ## stack
 
 Hardware:
